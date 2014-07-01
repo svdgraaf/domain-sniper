@@ -4,6 +4,7 @@ from optparse import OptionParser
 import argparse
 from openprovider import api
 
+# arguments parser
 parser = argparse.ArgumentParser()
 parser.add_argument('domain', metavar='domain', nargs='+',
                    help='domain(s) which should be checked', default='example.com')
@@ -21,8 +22,7 @@ parser.add_argument('--handle', metavar='handle',
 
 args = parser.parse_args()
 
-print args
-
+# build the authentication dictionary
 auth = {}
 if not args.hash and not args.password:
     sys.exit('Please provide authentication details')
@@ -39,6 +39,7 @@ else:
     }
 
 
+# split up the domains by extension
 client = api('https://api.openprovider.eu', auth=auth)
 domains = []
 for arg in args.domain:
@@ -49,6 +50,7 @@ for arg in args.domain:
     }
     domains.append(domain)
 
+# check all the domains
 data = client.checkDomainRequest(domains=domains)
 for row in data:
     if 'reason' in row:
@@ -56,6 +58,7 @@ for row in data:
     else:
         sys.stdout.write(' '.join([row['domain'], row['status']]))
 
+    # if the domain is free, try to register it
     if args.register and row['status'] == 'free':
         register = {
             'ownerHandle': args.handle,
@@ -70,6 +73,9 @@ for row in data:
             'period': '1',
         }
         response = client.createDomainRequest(**register)
-        sys.stdout.write(response['authCode'])
+        try:
+            sys.stdout.write(response['authCode'])
+        except:
+            sys.stdout.write('Registration failed')
 
     sys.stdout.write('\n')
