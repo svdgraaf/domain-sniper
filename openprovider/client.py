@@ -18,7 +18,6 @@ class OpenProviderClient:
             raise AttributeError(name)
 
         def wrapper(name=name, *args, **kwargs):
-            print name, args, kwargs
             return self._process_call(self, name, *args, **kwargs)
         return wrapper
 
