@@ -50,4 +50,5 @@ optional arguments:
 
 Todo
 ====
-Make provider optional, and create endpoints for other registrars
+ [ ] Make provider optional, and create endpoints for other registrars
+ [ ] Create actual pip installable module
