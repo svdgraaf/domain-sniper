@@ -14,7 +14,14 @@ parser.add_argument('-u', '--username', metavar='username',
 parser.add_argument('--hash', metavar='hash',
                    help='hash for authentication')
 
+parser.add_argument('-r','--register', default=False, action='store_true',
+                   help='Register domain if available')
+parser.add_argument('--handle', metavar='handle',
+                   help='Handle for registering domain (eg: SR003891-NL)')
+
 args = parser.parse_args()
+
+print args
 
 auth = {}
 if not args.hash and not args.password:
@@ -48,4 +55,21 @@ for row in data:
         sys.stdout.write(' '.join([row['domain'], row['status'], row['reason']]))
     else:
         sys.stdout.write(' '.join([row['domain'], row['status']]))
+
+    if args.register and row['status'] == 'free':
+        register = {
+            'ownerHandle': args.handle,
+            'adminHandle': args.handle,
+            'techHandle': args.handle,
+            'billingHandle': args.handle,
+            'domain': {
+                'name': row['domain'].split('.')[-2],
+                'extension': row['domain'].split('.')[-1]
+            }
+            ,
+            'period': '1',
+        }
+        response = client.createDomainRequest(**register)
+        sys.stdout.write(response['authCode'])
+
     sys.stdout.write('\n')

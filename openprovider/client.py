@@ -1,4 +1,5 @@
 from .dicttoxml import dicttoxml
+import collections
 import xmltodict
 import requests
 
@@ -7,6 +8,7 @@ class OpenProviderClient:
     methods = [
         'createCustomerRequest',
         'checkDomainRequest',
+        'createDomainRequest',
     ]
 
     def __init__(self, base_url, auth):
@@ -25,10 +27,9 @@ class OpenProviderClient:
         method = args[0]
         args = args[1:]
 
-        data = {
-            'credentials': self.auth,
-            method: kwargs
-        }
+        data = collections.OrderedDict()
+        data['credentials'] = self.auth
+        data[method] = kwargs
 
         xml = dicttoxml(data, custom_root='openXML', attr_type=False)
         response = self._send_request(xml)
@@ -42,6 +43,9 @@ class OpenProviderClient:
     def _parse_response(self, xml):
         # cleanup the weird OpenProvider response into sane python objects
         data = xmltodict.parse(xml)
+        if int(data['openXML']['reply']['code']) != 0:
+            raise Exception(data['openXML']['reply']['desc'])
+
         reply = data['openXML']['reply']['data']
 
         if reply.keys() == ['array']:

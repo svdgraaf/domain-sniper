@@ -12,10 +12,18 @@ example.com active Domain exists
 
 You can pipe the results to do something with it:
 ```bash
-./sniper example.com asdfsfdasfa23wdszc.com -u [username] --hash [hash] | awk '{print $1,":", $2}'
+./sniper example.com asdfsfdasfa23wdszc.com -u [username] --hash [hash] | awk '{print $1 ":", $2}'
 example.com : active
 asdfsfdasfa23wdszc.com : free
 ```
+
+You can have the script automatically register the domain when it's available. It will use the given handle for registering. It will return the authcode whenever the purchase was succesful.
+```bash
+./sniper example.com asdfsfdasfa23wdszc.com -u [username] --hash [hash] --handle SR003891-NL --register
+example.com active Domain exists
+asdfsfdasfa23wdszc.com free 123456
+```
+
 
 Installation
 ============
@@ -32,7 +40,8 @@ Options
 =======
 ```bash
 $ ./sniper -h
-usage: sniper [-h] [-p password] [-u username] [--hash hash]
+usage: sniper [-h] [-p password] [-u username] [--hash hash] [-r]
+              [--handle handle]
               domain [domain ...]
 
 positional arguments:
@@ -45,6 +54,8 @@ optional arguments:
   -u username, --username username
                         username for authentication
   --hash hash           hash for authentication
+  -r, --register        Register domain if available
+  --handle handle       Handle for registering domain (eg: SR003891-NL)
 ```
 
 
