@@ -64,3 +64,4 @@ Todo
 ====
  [ ] Make provider optional, and create endpoints for other registrars
  [ ] Create actual pip installable module
+ [ ] Cleanup shitty code :P
