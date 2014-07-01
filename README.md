@@ -1,7 +1,7 @@
 Domain-Sniper
 =============
 
-With this tool, you can easily check if a domain is in use or not. It uses the OpenProvider api for interaction.
+With this tool, you can easily check if a domain is in use or not. It uses the OpenProvider api for interaction, so you need an account there.
 
 Example
 =======
@@ -17,6 +17,15 @@ example.com : active
 asdfsfdasfa23wdszc.com : free
 ```
 
+Installation
+============
+```bash
+git clone git@github.com:svdgraaf/domain-sniper.git
+cd domain-sniper
+pip install -r requirements.txt
+# ...
+echo 'profit!'
+```
 
 
 Options
@@ -37,3 +46,8 @@ optional arguments:
                         username for authentication
   --hash hash           hash for authentication
 ```
+
+
+Todo
+====
+Make provider optional, and create endpoints for other registrars
